@@ -1,0 +1,307 @@
+openapi: 3.0.0
+info:
+  title: Unofficial Blink Camera API
+  version: "0.1.0"
+servers:
+  - url: https://{server}.immedia-semi.com
+    variables:
+      server:
+        default: rest-prod
+paths:
+  '/network/{networkID}/camera/{cameraID}/enable':
+    post:
+      operationId: enableCamera
+      parameters:
+        - name: networkID
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: cameraID
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Enable Camera Response
+          content:
+            'application/json':
+              schema: { $ref: '#/components/schemas/InitialCommandResponse' }
+  '/network/{networkID}/camera/{cameraID}/disable':
+    post:
+      operationId: disableCamera
+      parameters:
+        - name: networkID
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: cameraID
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Disable Camera Response
+          content:
+            'application/json':
+              schema: { $ref: '#/components/schemas/InitialCommandResponse' }
+  '/{media}.jpg':
+    get:
+      operationId: getThumbnail
+      parameters:
+        - name: media
+          in: path
+          description: Media URL
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Thumbnail
+          content:
+            'image/jpeg':
+              schema: { type: string, format: binary }
+  '/{media}':
+    get:
+      operationId: getVideo
+      parameters:
+        - name: media
+          in: path
+          description: Media URL
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Media
+          content:
+            'application/mp4':
+              schema: { type: string, format: binary }
+  
+  '/api/v4/account/login':
+    post:
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      
+      responses:
+        '200':
+          description: Login response
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+
+  '/api/v4/account/{accountID}/client/{clientID}/pin/verify':
+    post:
+      operationId: verifyPin
+      parameters:
+        - name: accountID
+          in: path
+          description: Account ID
+          required: true
+          schema: { type: integer }
+        - name: clientID
+          in: path
+          description: Client ID
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/VerifyPinRequest'
+      responses:
+        '200':
+          description: Verify Pin Response
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/VerifyPinResponse'
+        default:
+          description: Unexpected Response
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UnexpectedResponse'
+  '/api/v3/accounts/{accountID}/homescreen':
+    get:
+      parameters:
+        - name: accountID
+          in: path
+          description: Account ID
+          required: true
+          schema: { type: integer }
+      operationId: homescreen
+      responses:
+        '200':
+          description: Home Screen
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/HomeScreenResponse'
+  '/api/v1/accounts/{accountID}/media/changed':
+    get:
+      operationId: getVideoEvents
+      parameters:
+        - name: accountID
+          in: path
+          description: Account ID
+          required: true
+          schema: { type: integer }
+        - name: since
+          in: query
+          required: true
+          schema: { type: string }
+        - name: page
+          description: Page number for multiple pages of results
+          in: query
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Video events
+          content:
+            'application/json':
+              schema: { $ref: '#/components/schemas/VideoEvents' }
+components:
+  schemas:
+    'UnexpectedResponse':
+      type: object
+      required: [message, code]
+      properties:
+        message: { type: string }
+        code: { type: integer }
+    'LoginRequest':
+      type: object
+      required: [password, email]
+      properties:
+        unique_id: { type: string }
+        password: { type: string }
+        email: { type: string }
+    'LoginResponse':
+      type: object
+      required: [account, client, authtoken, region, lockout_time_remaining, force_password_reset, allow_pin_resend_seconds]
+      properties:
+        account:
+          type: object
+          properties:
+            id: { type: integer }
+            verification_required: { type: boolean }
+            new_account: { type: boolean }
+          required: [id, verification_required, new_account]
+        client:
+          type: object
+          properties:
+            id: { type: integer }
+            verification_required: { type: boolean }
+          required: [id, verification_required]
+        authtoken:
+          type: object
+          properties:
+            authtoken: { type: string }
+            message: { type: string }
+          required: [authtoken, message]
+        region:
+          type: object
+          properties:
+            tier: { type: string }
+            description: { type: string }
+            code: { type: string }
+          required: [tier, description, code]
+        lockout_time_remaining: { type: integer }
+        force_password_reset: { type: boolean }
+        allow_pin_resend_seconds: { type: integer }
+    'VerifyPinRequest':
+      type: object
+      properties:
+        pin: { type: string } # "123456"
+      required: [pin]
+    'VerifyPinResponse':
+      type: object
+      required: [valid, require_new_pin, message, code]
+      properties:
+        valid: { type: boolean } # true
+        require_new_pin: { type: boolean } # false
+        message: { type: string } # "Client has been successfully verified"
+        code: { type: integer } # 1234
+    'HomeScreenResponse':
+      type: object
+      required: [account, cameras]
+      properties:
+        account:
+          type: object
+          required: [id, email_verified, email_verification_required]
+          properties:
+            id: { type: integer } # 1234
+            email_verified: { type: boolean } # true
+            email_verification_required: { type: boolean } # false
+        cameras:
+          type: array
+          items:
+            $ref: '#/components/schemas/Camera'
+    'Camera':
+      type: object
+      required: [id, created_at, updated_at, name, serial, fw_version, type, enabled, thumbnail, status, battery, usage_rate, network_id, signals, local_storage_enabled, local_storage_compatible]
+      properties:
+        id: { type: integer } # 4539
+        created_at: { type: string } # "2020-09-14T16:41:38+00:00"
+        updated_at: { type: string } # "2020-09-14T16:41:38+00:00"
+        name: { type: string } # Front Door"
+        serial: { type: string } # "861575233"
+        fw_version: { type: string } # "7.96"
+        type: { type: string } # "xt2"
+        enabled: { type: boolean } # true
+        thumbnail: { type: string } # "/media/e003/account/506/network/3801/camera/4539/thumbnail/fw_7.96__mJKyh0mA_2020_09_20__16_45PM"
+        status: { type: string } # "done"
+        battery: { type: string } # "ok"
+        usage_rate: { type: boolean } # true
+        network_id: { type: integer } # 3801
+        signals:
+          type: object
+          required: [lfr, wifi, temp, battery]
+          properties:
+            lfr: { type: integer } # 3
+            wifi: { type: integer } # 5
+            temp: { type: integer } # 51
+            battery: { type: integer } # 3
+        local_storage_enabled: { type: boolean } # false
+        local_storage_compatible: { type: boolean } # false
+    'VideoEvents':
+      type: object
+      required: [limit, purge_id, refresh_count, media]
+      properties:
+        limit: { type: integer } # 25
+        purge_id: { type: integer } # 1234567890
+        refresh_count: { type: integer } # 0
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+    'Media':
+      type: object
+      required: [id, created_at, updated_at, deleted, device, device_id, device_name, network_id, network_name, type, source, watched, partial, thumbnail, media, additional_devices, time_zone]
+      properties:
+        id: { type: integer } # 1234567890
+        created_at: { type: string } # "2020-09-14T16:41:38+00:00"
+        updated_at: { type: string } # "2020-09-14T16:41:38+00:00"
+        deleted: { type: boolean } # false
+        device: { type: string } # "camera"
+        device_id: { type: integer } # 1234567
+        device_name: { type: string } # "The Device Name"
+        network_id: { type: integer } # 1234
+        network_name: { type: string } # "The Netork Name"
+        type: { type: string } # "video"
+        source: { type: string } # "pir"
+        watched: { type: boolean } # true
+        partial: { type: boolean } # false
+        thumbnail: { type: string } # "/api/v2/accounts/1234/media/thumb/mediathumbnailname"
+        media: { type: string } # "/api/v2/accounts/1234/media/clip/mediavideoname.mp4"
+        time_zone: { type: string } # "America/Chicago"
+    'InitialCommandResponse':
+      type: object
+      required: [id]
+      properties:
+        id: { type: integer } # 1833710
