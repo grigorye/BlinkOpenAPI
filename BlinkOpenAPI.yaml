@@ -3,10 +3,7 @@ info:
   title: Unofficial Blink Camera API
   version: "0.1.0"
 servers:
-  - url: https://{server}.immedia-semi.com
-    variables:
-      server:
-        default: rest-prod
+  - url: https://rest-prod.immedia-semi.com
 paths:
   '/network/{networkID}/camera/{cameraID}/enable':
     post:
