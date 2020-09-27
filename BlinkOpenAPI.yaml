@@ -285,13 +285,13 @@ components:
         created_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
         updated_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
         deleted: { type: boolean } # false
-        device: { type: string } # "camera"
+        device: { type: string, enum: ["camera"] } # "camera"
         device_id: { type: integer } # 1234567
         device_name: { type: string } # "The Device Name"
         network_id: { type: integer } # 1234
         network_name: { type: string } # "The Netork Name"
-        type: { type: string } # "video"
-        source: { type: string } # "pir"
+        type: { type: string, enum: ["video"] } # "video"
+        source: { type: string, enum: ["liveview", "pir"] } # "pir"
         watched: { type: boolean } # true
         partial: { type: boolean } # false
         thumbnail: { type: string } # "/api/v2/accounts/1234/media/thumb/mediathumbnailname"
