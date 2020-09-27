@@ -151,7 +151,7 @@ paths:
         - name: since
           in: query
           required: true
-          schema: { type: string }
+          schema: { type: string, format: date-time }
         - name: page
           description: Page number for multiple pages of results
           in: query
@@ -244,8 +244,8 @@ components:
       required: [id, created_at, updated_at, name, serial, fw_version, type, enabled, thumbnail, status, battery, usage_rate, network_id, signals, local_storage_enabled, local_storage_compatible]
       properties:
         id: { type: integer } # 4539
-        created_at: { type: string } # "2020-09-14T16:41:38+00:00"
-        updated_at: { type: string } # "2020-09-14T16:41:38+00:00"
+        created_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
+        updated_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
         name: { type: string } # Front Door"
         serial: { type: string } # "861575233"
         fw_version: { type: string } # "7.96"
@@ -282,8 +282,8 @@ components:
       required: [id, created_at, updated_at, deleted, device, device_id, device_name, network_id, network_name, type, source, watched, partial, thumbnail, media, additional_devices, time_zone]
       properties:
         id: { type: integer } # 1234567890
-        created_at: { type: string } # "2020-09-14T16:41:38+00:00"
-        updated_at: { type: string } # "2020-09-14T16:41:38+00:00"
+        created_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
+        updated_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
         deleted: { type: boolean } # false
         device: { type: string } # "camera"
         device_id: { type: integer } # 1234567
