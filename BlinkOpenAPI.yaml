@@ -118,11 +118,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VerifyPinResponse'
         default:
-          description: Unexpected Response
-          content:
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/UnexpectedResponse'
+          $ref: '#/components/schemas/ErrorResponse'
   '/api/v3/accounts/{accountID}/homescreen':
     get:
       parameters:
@@ -163,9 +159,18 @@ paths:
           content:
             'application/json':
               schema: { $ref: '#/components/schemas/VideoEvents' }
+        default:
+          $ref: '#/components/responses/ErrorResponse'
 components:
+  responses:
+    'ErrorResponse':
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    'UnexpectedResponse':
+    'Error':
       type: object
       required: [message, code]
       properties:
