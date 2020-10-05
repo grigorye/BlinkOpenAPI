@@ -298,7 +298,7 @@ components:
         type: { type: string, enum: ["video"] } # "video"
         source: { type: string, enum: ["liveview", "pir"] } # "pir"
         watched: { type: boolean } # true
-        partial: { type: boolean } # false
+        partial: { type: boolean, nullable: true } # false
         thumbnail: { type: string } # "/api/v2/accounts/1234/media/thumb/mediathumbnailname"
         media: { type: string } # "/api/v2/accounts/1234/media/clip/mediavideoname.mp4"
         time_zone: { type: string } # "America/Chicago"
