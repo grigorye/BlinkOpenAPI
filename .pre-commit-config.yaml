@@ -1,0 +1,11 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+-   repo: https://github.com/codespell-project/codespell
+    rev: v1.17.1
+    hooks:
+    - id: codespell
+      args: [-I, .codespell-ignore-words]
