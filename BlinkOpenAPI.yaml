@@ -231,7 +231,7 @@ components:
         code: { type: integer } # 1234
     'HomeScreenResponse':
       type: object
-      required: [account, cameras]
+      required: [account, networks, sync_modules, cameras]
       properties:
         account:
           type: object
@@ -240,13 +240,50 @@ components:
             id: { type: integer } # 1234
             email_verified: { type: boolean } # true
             email_verification_required: { type: boolean } # false
+        networks:
+          type: array
+          items: { $ref: '#/components/schemas/Network' }
+        sync_modules:
+          type: array
+          items: { $ref: '#/components/schemes/SyncModule' }
         cameras:
           type: array
           items:
             $ref: '#/components/schemas/Camera'
+    'SyncModule':
+      type: object
+      required: [id, created_at, updated_at, name, onboarded, status, serial, fw_version, last_hb, wifi_strength, network_id, enable_temp_alerts, local_storage_enabled, local_storage_compatible, local_storage_status]
+      properties:
+        id: { type: integer } # 4539
+        created_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
+        updated_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
+        last_hb: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
+        name: { type: string } # Front Door"
+        onboarded: { type: boolean }
+        enable_temp_alerts: { type: boolean }
+        status: { type: string, enum: ["online", "offline"] }
+        serial: { type: string }
+        fw_version: { type: string }
+        wifi_strength: { type: integer }
+        network_id: { type: integer }
+        local_storage_enabled: { type: boolean }
+        local_storage_compatible: { type: boolean }
+        local_storage_status: { type: string } # "unavailable"
+    'Network':
+      type: object
+      required: [id, created_at, updated_at, name, time_zone, dst, armed, lv_save]
+      properties:
+        id: { type: integer } # 4539
+        created_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
+        updated_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
+        name: { type: string } # Front Door"
+        time_zone: { type: string } # "America/Chicago"
+        dst: { type: boolean }
+        armed: { type: boolean }
+        lv_save: { type: boolean }
     'Camera':
       type: object
-      required: [id, created_at, updated_at, name, serial, fw_version, type, enabled, thumbnail, status, battery, usage_rate, network_id, signals, local_storage_enabled, local_storage_compatible]
+      required: [id, created_at, updated_at, name, serial, fw_version, type, enabled, thumbnail, status, battery, usage_rate, network_id, signals, local_storage_enabled, local_storage_compatible, issues]
       properties:
         id: { type: integer } # 4539
         created_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
@@ -257,10 +294,11 @@ components:
         type: { type: string } # "xt2"
         enabled: { type: boolean } # true
         thumbnail: { type: string } # "/media/e003/account/506/network/3801/camera/4539/thumbnail/fw_7.96__mJKyh0mA_2020_09_20__16_45PM"
-        status: { type: string } # "done"
-        battery: { type: string } # "ok"
+        status: { type: string, enum: ["done", "offline"] } # "done"
+        battery: { type: string, enum: ["ok", "low"] } # "ok"
         usage_rate: { type: boolean } # true
         network_id: { type: integer } # 3801
+        issues: { type: array, items: { $ref: '#/components/schemas/Issue' } }
         signals:
           type: object
           required: [lfr, wifi, temp, battery]
@@ -307,3 +345,8 @@ components:
       required: [id]
       properties:
         id: { type: integer } # 1833710
+    'Issue':
+      type: object
+      properties:
+        __unknown: { type: integer }
+  
