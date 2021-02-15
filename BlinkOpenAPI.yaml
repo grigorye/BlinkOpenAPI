@@ -72,7 +72,7 @@ paths:
             'application/mp4':
               schema: { type: string, format: binary }
   
-  '/api/v4/account/login':
+  '/api/v5/account/login':
     post:
       operationId: login
       requestBody:
