@@ -183,6 +183,10 @@ components:
         unique_id: { type: string }
         password: { type: string }
         email: { type: string }
+        client_name: { type: string }
+        app_version: { type: string }
+        reauth: { type: boolean }
+        device_identifier: { type: string }
     'LoginResponse':
       type: object
       required: [account, client, authtoken, region, lockout_time_remaining, force_password_reset, allow_pin_resend_seconds]
