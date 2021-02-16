@@ -189,34 +189,50 @@ components:
         device_identifier: { type: string }
     'LoginResponse':
       type: object
-      required: [account, client, authtoken, region, lockout_time_remaining, force_password_reset, allow_pin_resend_seconds]
+      required: [account, auth, phone, verification, lockout_time_remaining, force_password_reset, allow_pin_resend_seconds]
       properties:
         account:
           type: object
           properties:
-            id: { type: integer }
-            verification_required: { type: boolean }
+            account_id: { type: integer }
+            user_id: { type: integer }
+            client_id: { type: integer }
             new_account: { type: boolean }
-          required: [id, verification_required, new_account]
-        client:
+            tier: { type: string } # "e003"
+            region: { type: string } # "eu"
+            account_verification_required: { type: boolean }
+            client_verification_required: { type: boolean }
+            phone_verification_required: { type: boolean }
+            verification_channel: { type: string } # "email"
+          required: [account_id, user_id, client_id, new_account, tier, region, account_verification_required, client_verification_required, phone_verification_required, verification_channel]
+        auth:
           type: object
           properties:
-            id: { type: integer }
-            verification_required: { type: boolean }
-          required: [id, verification_required]
-        authtoken:
+            token: { type: string }
+          required: [token]
+        phone:
           type: object
           properties:
-            authtoken: { type: string }
-            message: { type: string }
-          required: [authtoken, message]
-        region:
+            number: { type: string } # "+"
+            last_4_digits: { type: string }
+            country_calling_code: { type: string }
+            valid: { type: boolean }
+          required: [number, last_4_digits, country_calling_code, valid]
+        verification:
           type: object
           properties:
-            tier: { type: string }
-            description: { type: string }
-            code: { type: string }
-          required: [tier, description, code]
+            email:
+              type: object
+              properties:
+                required: { type: boolean }
+              required: [required]
+            phone:
+              type: object
+              properties:
+                required: { type: boolean }
+                channel: { type: string } # "sms"
+              required: [required, channel]
+          required: [email, phone]
         lockout_time_remaining: { type: integer }
         force_password_reset: { type: boolean }
         allow_pin_resend_seconds: { type: integer }
