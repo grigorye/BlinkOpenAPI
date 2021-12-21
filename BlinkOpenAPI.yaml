@@ -352,7 +352,7 @@ components:
         device_id: { type: integer } # 1234567
         device_name: { type: string } # "The Device Name"
         network_id: { type: integer } # 1234
-        network_name: { type: string } # "The Netork Name"
+        network_name: { type: string } # "The Network Name"
         type: { type: string, enum: ["video"] } # "video"
         source: { type: string, enum: ["liveview", "pir"] } # "pir"
         watched: { type: boolean } # true
