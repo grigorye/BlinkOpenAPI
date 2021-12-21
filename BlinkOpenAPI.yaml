@@ -348,7 +348,7 @@ components:
         created_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
         updated_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
         deleted: { type: boolean } # false
-        device: { type: string, enum: ["camera"] } # "camera"
+        device: { type: string, enum: ["camera", "owl"] } # "camera"
         device_id: { type: integer } # 1234567
         device_name: { type: string } # "The Device Name"
         network_id: { type: integer } # 1234
