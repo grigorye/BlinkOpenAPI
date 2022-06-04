@@ -303,7 +303,7 @@ components:
         lv_save: { type: boolean }
     'Camera':
       type: object
-      required: [id, created_at, updated_at, name, serial, fw_version, type, enabled, thumbnail, status, battery, usage_rate, network_id, signals, local_storage_enabled, local_storage_compatible, issues]
+      required: [id, created_at, updated_at, name, serial, fw_version, type, enabled, status, battery, usage_rate, network_id, signals, local_storage_enabled, local_storage_compatible, issues]
       properties:
         id: { type: integer } # 4539
         created_at: { type: string, format: date-time } # "2020-09-14T16:41:38+00:00"
