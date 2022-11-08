@@ -118,7 +118,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VerifyPinResponse'
         default:
-          $ref: '#/components/schemas/ErrorResponse'
+          $ref: '#/components/responses/ErrorResponse'
   '/api/v3/accounts/{accountID}/homescreen':
     get:
       parameters:
@@ -265,7 +265,7 @@ components:
           items: { $ref: '#/components/schemas/Network' }
         sync_modules:
           type: array
-          items: { $ref: '#/components/schemes/SyncModule' }
+          items: { $ref: '#/components/schemas/SyncModule' }
         cameras:
           type: array
           items:
